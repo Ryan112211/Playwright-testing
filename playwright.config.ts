@@ -6,6 +6,7 @@ module.exports = defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
+  reportOnEmpty: true,
   
   reporter: [
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
@@ -20,6 +21,7 @@ module.exports = defineConfig({
         mentionOnFailure: process.env.TEAMS_MENTION_ON_FAILURE, // Optional: 'user1@company.com,user2@company.com'
         mentionOnFailureText: '{mentions} - Tests failed! Please check.',
         enableEmoji: true,
+        
       }
     ]
   ],

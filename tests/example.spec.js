@@ -28,7 +28,7 @@ test.describe('Example Website Tests', () => {
     const content = page.locator('body');
     await expect(content).toContainText('This domain is for use in illustrative examples');
   });
-    test('should display body text', async ({ page }) => {
+    test('should display body text failure', async ({ page }) => {
     await page.goto('https://example.com');
     
     // Check main content is visible
