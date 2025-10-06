@@ -1,32 +1,31 @@
 const { test, expect } = require('@playwright/test');
 
-test.describe('Playwright Website Tests', () => {
-  test('homepage has title and get started link', async ({ page }) => {
-    await page.goto('/');
+test.describe('Example Website Tests', () => {
+  test('should load example.com homepage', async ({ page }) => {
+    await page.goto('https://example.com');
     
-    await expect(page).toHaveTitle(/Playwright/);
+    // Check page title
+    await expect(page).toHaveTitle(/Example Domain/);
     
-    const getStarted = page.getByRole('link', { name: 'Get started' });
-    await expect(getStarted).toBeVisible();
-  });
-
-  test('check documentation navigation', async ({ page }) => {
-    await page.goto('/');
-    
-    await page.getByRole('link', { name: 'Docs' }).click();
-    await expect(page).toHaveURL(/.*docs.*/);
-    
-    const heading = page.getByRole('heading', { level: 1 });
+    // Check heading is visible
+    const heading = page.getByRole('heading', { name: 'Example Domain' });
     await expect(heading).toBeVisible();
   });
 
-  test('search functionality works', async ({ page }) => {
-    await page.goto('/');
+  test('should have a link to more information', async ({ page }) => {
+    await page.goto('https://example.com');
     
-    await page.getByRole('button', { name: 'Search' }).click();
-    await page.getByPlaceholder('Search docs').fill('testing');
+    // Check for the "More information..." link
+    const link = page.getByRole('link', { name: /More information/i });
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute('href', 'https://www.iana.org/domains/example');
+  });
+
+  test('should display body text', async ({ page }) => {
+    await page.goto('https://example.com');
     
-    const searchResults = page.locator('.DocSearch-Hits');
-    await expect(searchResults).toBeVisible({ timeout: 10000 });
+    // Check main content is visible
+    const content = page.locator('body');
+    await expect(content).toContainText('This domain is for use in illustrative examples');
   });
 });

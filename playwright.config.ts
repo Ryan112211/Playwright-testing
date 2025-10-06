@@ -25,9 +25,10 @@ module.exports = defineConfig({
   ],
   
   use: {
-    baseURL: 'https://playwright.dev',
+    baseURL: 'https://example.com',  // Simple, stable test site
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    video: 'retain-on-failure',  // Record video on failures
   },
   
   projects: [
