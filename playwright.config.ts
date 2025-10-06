@@ -6,25 +6,34 @@ module.exports = defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
+  
   reporter: [
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
-    ['json', { outputFile: 'test-results.json' }],
-    ['list']
+    ['list'],
+    [
+      'playwright-msteams-reporter',
+      {
+        webhookUrl: process.env.TEAMS_WEBHOOK_URL,
+        webhookType: 'powerautomate', // This is key! Not 'msteams'
+        linkToResultsUrl: process.env.REPORT_URL,
+        linkUrlOnSuccess: true, // Show link even when tests pass
+        mentionOnFailure: process.env.TEAMS_MENTION_ON_FAILURE, // Optional: 'user1@company.com,user2@company.com'
+        mentionOnFailureText: '{mentions} - Tests failed! Please check.',
+        enableEmoji: true,
+      }
+    ]
   ],
+  
   use: {
     baseURL: 'https://playwright.dev',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
+  
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  webServer: process.env.CI ? undefined : {
-    command: 'npm run start',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-  },
 });
