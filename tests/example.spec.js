@@ -1,38 +1,17 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
-test.describe('Example Website Tests', () => {
-  test('should load example.com homepage', async ({ page }) => {
-    await page.goto('https://example.com');
-    
-    // Check page title
-    await expect(page).toHaveTitle(/Example Domain/);
-    
-    // Check heading is visible
-    const heading = page.getByRole('heading', { name: 'Example Domain' });
-    await expect(heading).toBeVisible();
-  });
-
-  test('should have a link to more information', async ({ page }) => {
-    await page.goto('https://example.com');
-    
-    // Check for the "More information..." link
-    const link = page.getByRole('link', { name: /More information/i });
-    await expect(link).toBeVisible();
-    await expect(link).toHaveAttribute('href', 'https://www.iana.org/domains/example');
-  });
-
-  test('should display body text', async ({ page }) => {
-    await page.goto('https://example.com');
-    
-    // Check main content is visible
-    const content = page.locator('body');
-    await expect(content).toContainText('This domain is for use in illustrative examples');
-  });
-    test('should display body text failure', async ({ page }) => {
-    await page.goto('https://example.com');
-    
-    // Check main content is visible
-    const content = page.locator('body');
-    await expect(content).toContainText('Termintor');
-  });
+test('Selects a vehicle and goes to membership app', async ({ page }) => {
+  await page.goto('https://version2-develop.fdm.dk/vi-tilbyder/forsikring/bilreparation');
+  await page.locator('#coiOverlay').click();
+  await page.getByRole('button', { name: 'Accepter alle' }).click();
+  await page.getByRole('textbox', { name: 'Indtast din nummerplade' }).click();
+  await page.getByRole('textbox', { name: 'Indtast din nummerplade' }).fill('DY69454');
+  await page.getByRole('button', { name: 'Søg' }).click();
+  await page.getByRole('button', { name: 'close-popover' }).click();
+  await page.locator('label').filter({ hasText: 'Jeg bekræfter på tro & love:' }).click();
+  await page.getByRole('textbox', { name: 'Hvor mange km har bilen kørt' }).click();
+  await page.getByRole('textbox', { name: 'Hvor mange km har bilen kørt' }).fill('5000');
+  await page.getByRole('button', { name: 'Næste' }).click();
+  await page.getByRole('button', { name: 'close-popover' }).click();
+  await page.getByRole('button', { name: 'Næste' }).click();
 });

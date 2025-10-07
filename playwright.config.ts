@@ -27,7 +27,7 @@ module.exports = defineConfig({
   ],
   
   use: {
-    baseURL: 'https://example.com',  // Simple, stable test site
+    baseURL: 'https://version2-develop.fdm.dk/vi-tilbyder/forsikring/bilreparation',  // Simple, stable test site
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',  // Record video on failures
