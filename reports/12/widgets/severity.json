@@ -1,0 +1,1 @@
+[{"uid":"b3e8b4fc6efc0402","name":"searches for vehicle","time":{"start":1759904680497,"stop":1759904689739,"duration":9242},"status":"passed","severity":"normal"},{"uid":"6d36d4805b01ee1a","name":"searches for vehicle second fail","time":{"start":1759904753682,"stop":1759904784010,"duration":30328},"status":"broken","severity":"normal"}]
