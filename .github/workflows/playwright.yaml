@@ -40,19 +40,31 @@ jobs:
       run: npm test
       continue-on-error: true
 
-    - name: Upload test results
+    - name: Generate Allure Report
+      if: always()
+      run: npm run allure:generate
+
+    - name: Upload Allure Results
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: playwright-report
-        path: playwright-report/
+        name: allure-results
+        path: allure-results/
         retention-days: 30
 
-    - name: Deploy to GitHub Pages
+    - name: Upload Allure Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-report
+        path: allure-report/
+        retention-days: 30
+
+    - name: Deploy Allure Report to GitHub Pages
       if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./playwright-report
+        publish_dir: ./allure-report
         destination_dir: reports/${{ github.run_number }}
         force_orphan: true

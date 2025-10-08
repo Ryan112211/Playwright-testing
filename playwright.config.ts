@@ -9,28 +9,31 @@ module.exports = defineConfig({
   reportOnEmpty: true,
   
   reporter: [
-    ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['list'],
+    ['allure-playwright', {
+      outputFolder: 'allure-results',
+      detail: true,
+      suiteTitle: false
+    }],
     [
       'playwright-msteams-reporter',
       {
         webhookUrl: process.env.TEAMS_WEBHOOK_URL,
-        webhookType: 'powerautomate', // This is key! Not 'msteams'
+        webhookType: 'powerautomate',
         linkToResultsUrl: process.env.REPORT_URL,
-        linkUrlOnSuccess: true, // Show link even when tests pass
-        mentionOnFailure: 'extteomkh@fdm.dk', // Optional: 'user1@company.com,user2@company.com'
+        linkUrlOnSuccess: true,
+        mentionOnFailure: process.env.TEAMS_MENTION_ON_FAILURE || '',
         mentionOnFailureText: '{mentions} - Tests failed! Please check.',
         enableEmoji: true,
-        
       }
     ]
   ],
   
   use: {
-    baseURL: 'https://version2-develop.fdm.dk/vi-tilbyder/forsikring/bilreparation',  // Simple, stable test site
+    baseURL: 'https://version2-develop.fdm.dk/vi-tilbyder/forsikring/bilreparation',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure',  // Record video on failures
+    video: 'retain-on-failure',
   },
   
   projects: [
