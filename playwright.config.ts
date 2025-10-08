@@ -18,7 +18,7 @@ module.exports = defineConfig({
         webhookType: 'powerautomate', // This is key! Not 'msteams'
         linkToResultsUrl: process.env.REPORT_URL,
         linkUrlOnSuccess: true, // Show link even when tests pass
-        mentionOnFailure: process.env.TEAMS_MENTION_ON_FAILURE, // Optional: 'user1@company.com,user2@company.com'
+        mentionOnFailure: 'extteomkh@fdm.dk', // Optional: 'user1@company.com,user2@company.com'
         mentionOnFailureText: '{mentions} - Tests failed! Please check.',
         enableEmoji: true,
         
