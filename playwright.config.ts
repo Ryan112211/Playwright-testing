@@ -30,7 +30,7 @@ module.exports = defineConfig({
   ],
   
   use: {
-    baseURL: 'https://version2-develop.fdm.dk/vi-tilbyder/forsikring/bilreparation',
+    baseURL: 'https://version2-develop.fdm.dk',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

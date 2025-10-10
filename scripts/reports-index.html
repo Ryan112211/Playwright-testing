@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playwright Test Reports</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .report-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        .report-card.latest {
+            border: 3px solid #667eea;
+            position: relative;
+        }
+        .latest-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+        .report-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        .report-date {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 16px;
+        }
+        .report-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+        .report-link:hover {
+            background: #5568d3;
+        }
+        .no-reports {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 Playwright Test Reports</h1>
+        <div class="reports-grid" id="reportsGrid"></div>
+        <div class="no-reports" id="noReports" style="display: none;">
+            No reports available yet.
+        </div>
+    </div>
+    
+    <script>
+        async function loadReports() {
+            const reportsGrid = document.getElementById('reportsGrid');
+            const noReports = document.getElementById('noReports');
+            
+            try {
+                const response = await fetch('reports-data.json');
+                const data = await response.json();
+                
+                if (data.reports.length === 0) {
+                    noReports.style.display = 'block';
+                    return;
+                }
+                
+                data.reports.forEach((report, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'report-card' + (index === 0 ? ' latest' : '');
+                    card.onclick = () => window.location.href = report.url;
+                    
+                    card.innerHTML = `
+                        ${index === 0 ? '<span class="latest-badge">LATEST</span>' : ''}
+                        <div class="report-number">Run #${report.runNumber}</div>
+                        <div class="report-date">${new Date(report.timestamp).toLocaleString()}</div>
+                        <a href="${report.url}" class="report-link" onclick="event.stopPropagation()">
+                            View Report →
+                        </a>
+                    `;
+                    
+                    reportsGrid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                noReports.style.display = 'block';
+            }
+        }
+        
+        loadReports();
+    </script>
+</body>
+</html>

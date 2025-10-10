@@ -60,11 +60,48 @@ jobs:
         path: allure-report/
         retention-days: 30
 
-    - name: Deploy Allure Report to GitHub Pages
+    - name: Checkout gh-pages branch
+      if: always()
+      uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        path: gh-pages-content
+
+    - name: Prepare reports directory
+      if: always()
+      run: |
+        mkdir -p gh-pages-content/reports/${{ github.run_number }}
+        cp -r allure-report/* gh-pages-content/reports/${{ github.run_number }}/
+
+    - name: Generate Reports Index
+      if: always()
+      run: |
+        cd gh-pages-content
+        
+        # Copy the index template from repo
+        cp ../scripts/reports-index.html index.html || echo "No template found, using default"
+        
+        # Get list of all report directories and create JSON
+        if [ -d "reports" ]; then
+          REPORTS=$(ls -1 reports | sort -rn)
+        else
+          REPORTS=""
+        fi
+        
+        echo '{"reports":[' > reports-data.json
+        FIRST=true
+        for report in $REPORTS; do
+          [ "$FIRST" = false ] && echo "," >> reports-data.json
+          echo "{\"runNumber\":\"$report\",\"timestamp\":\"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\",\"url\":\"reports/$report/index.html\"}" >> reports-data.json
+          FIRST=false
+        done
+        echo ']}' >> reports-data.json
+
+    - name: Deploy to GitHub Pages
       if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./allure-report
-        destination_dir: reports/${{ github.run_number }}
-        force_orphan: true
+        publish_dir: ./gh-pages-content
+        keep_files: true
+        force_orphan: false
