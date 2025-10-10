@@ -1,0 +1,6 @@
+Test running with data: {
+  firstName: 'Verify6496',
+  lastName: 'User1760087433960',
+  email: 'test.verify6496.user1760087433960@automated-test.com',
+  fullName: 'Verify6496 User1760087433960'
+}
